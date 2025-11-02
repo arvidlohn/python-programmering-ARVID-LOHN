@@ -1,22 +1,29 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import os
 
-path_datapoint = r"D:\IT_högskolan\01_Python_programming\python-programmering-ARVID-LOHN\Labs\Labb_2\datapoints.txt"
-path_testpoint = r"D:\IT_högskolan\01_Python_programming\python-programmering-ARVID-LOHN\Labs\Labb_2\testpoints.txt"
-data = pd.read_csv(path_datapoint, sep=",")
+
+#Sökvägen för filen så att datan kan hittas. 
+path_datapoint = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
+path_testpoint = path_datapoint + r"/testpoints.txt"
+path_datapoint = path_datapoint + r"/datapoints.txt"
+
+data = pd.read_csv(path_datapoint, sep=",", header=None, names=["x", "y", "pokemon", "none"])
 test = pd.read_csv(path_testpoint, sep=",")
 
-#data.groupby(' label (0-pichu').plot(kind="scatter", x="(width (cm)", y=" height (cm)",
- #                                    alpha=0.7)
-colors = {"0":"blue", "1":"red"}
 
-for pokemon in ["0","1"]:
-    subset = data[data[' label (0-pichu'] == pokemon]
-    plt.scatter(subset["(width (cm)"], subset[" height (cm)"],
-                c=colors[pokemon], label="Pokemon", alpha=0.7)
+data.drop("none", inplace=True, axis=1)
+data.drop(0, inplace=True, axis=0)
+data = data.astype(float)
 
 
+plt.scatter(x=data["x"], y=data["y"], c=data["pokemon"], cmap="coolwarm")
 
-plt.legend()
+
+
+plt.title("Pikachu or Pichu")
+plt.xlabel("Width")
+plt.ylabel("Height")
+plt.legend(title="Pokemon", loc="upper right")
 plt.show()
